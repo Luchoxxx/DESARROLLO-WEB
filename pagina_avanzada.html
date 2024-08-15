@@ -112,7 +112,7 @@
                     const apellido = localStorage.getItem('apellido');
                 
                     if(nombre || apellido){
-                        document.getElementById('recuperarMensaje').textContent = `Nombre recuperado: ${nombre|| 'No hay datos guardados.'}  Apellido recuperado : ${apellido || 'No hay datos guardados.'}`;
+                        document.getElementById('recuperarMensaje').innerHTML = `Nombre recuperado: ${nombre|| 'No hay datos guardados.'} <br> Apellido recuperado : ${apellido || 'No hay datos guardados.'}`;
                     }else{
                         document.getElementById('recuperarMensaje').textContent = 'No hay datos guardados';
                     }
@@ -129,17 +129,16 @@
                 <p id="ubicacion" aria-live="polite"></p>
             </section>
         </div>
-
         <script>
             // Codigo de la geolocaizacion
             document.getElementById('obtenerUbicacion').addEventListener('click', () => {
                 if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition((position) => {
-                        const lat = position.coords.latitude;
-                        const lon = position.coords.longitude;
+                    navigator.geolocation.getCurrentPosition((posicion) => {
+                        const lat = posicion.coords.latitude;
+                        const lon = posicion.coords.longitude;
                         document.getElementById('ubicacion').textContent = `Latitud: ${lat}, Longitud: ${lon}`;
                     }, () => {
-                        alert('Error al obtener la ubicación.');
+                        alert('Error al obtener tu ubicación.');
                     });
                 } else {
                     alert('Geolocalización no soportada por este navegador.');
@@ -152,13 +151,12 @@
                 <h2 id="section-dragdrop">Drag and Drop</h2>
                 <div class="drag-zone">
                     <div id="draggable" draggable="true" aria-label="Elemento arrastrable">Arrástrame</div>
-                    <div id="dropzone" aria-label="Zona de soltar" aria-dropeffect="move">Suelta aquí</div>
+                    <div id="dropzone" aria-label="Zona de soltar" aria-dropeffect="move" style="border: 2px dashed #ccc; padding: 20px; margin-top: 20px;">Suelta aquí</div>
                 </div>
             </section>
         </div>
         <script>
-            
-            // Implementacion de Drag and Drop
+            //  Drag and Drop
             const draggable = document.getElementById('draggable');
             const dropzone = document.getElementById('dropzone');
 
@@ -175,7 +173,6 @@
                 const data = event.dataTransfer.getData('text');
                 const element = document.getElementById(data);
                 dropzone.appendChild(element);
-                alert('Elemento soltado con éxito.');
             });
         </script>
     </div>

@@ -1,11 +1,161 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+    <meta name="description" content="Página web avanzada con gráficos, almacenamiento local, geolocalización y drag and drop.">
+    <meta name="keywords" content="HTML5, Canvas, localStorage, Geolocation, Drag and Drop, Accesibilidad, SEO">
     
+    <title>Página Web Avanzada</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header>
+        <h1>Bienvenido a la Página Web Avanzada</h1>
+        <p>Explora las funcionalidades avanzadas que hemos implementado.</p>
+    </header>
+    <main>
+        <!-- Parte referente a canvas -->
+        <section aria-labelledby="section-graficos">
+            <h2 id="section-graficos">Gráficos en Canvas</h2>
+            <canvas id="cubo-2d" width="400" height="200" aria-label="Cubo 3D"></canvas>
+        </section>
+            <script>
+            // Dibujos
+            //cubo en 2d 
+            const canvas = document.getElementById('cubo-2d');
+            const ctx = canvas.getContext('2d');
+            //ctx.fillStyle = 'red';
+            //ctx.fillRect(10, 10, 150, 100);
+            // cubo en 3d 
+            const tamaño = 400;  
+            const centroX = canvas.width /2 ;
+            const centroY = canvas.height/ 2;
+            const perspectiva = 0.5;
+
+            const vertices = [
+            [-1,-1,-1],
+            [1,-1,-1],
+            [1,1,-1],
+            [-1,1,-1],
+            [-1,-1,1],
+            [1,-1,1],
+            [1,1,1],
+            [-1,1,1]
+            ];
+            const aristas = [
+            [0, 1],
+            [1, 2],
+            [2, 3],
+            [3, 0],
+            [4, 5],
+            [5, 6],
+            [6, 7],
+            [7, 4],
+            [0, 4],
+            [1, 5],
+            [2, 6],
+            [3, 7]
+            ];
+            // proyectamos el cubo
+            function proyectaCubo([x,y,z]){
+                const factor = tamaño/(z +3);
+                const x2D = x*factor *perspectiva;
+                const y2D = y*factor *perspectiva;
+                return [centroX + x2D, centroY - y2D];
+            }
+            function dibujaCubo(){
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                aristas.forEach(([start, end]) => {
+                    const [x1, y1] = proyectaCubo(vertices[start]);
+                    const [x2, y2] = proyectaCubo(vertices[end]);
+
+                    ctx.beginPath();
+                    ctx.moveTo(x1, y1);
+                    ctx.lineTo(x2, y2);
+                    ctx.strokeStyle = 'blue';
+                    ctx.stroke();
+                });
+            }
+            dibujaCubo();
+            </script>
+
+        <!-- Almacenamiento local -->
+        <section aria-labelledby="section-localstorage">
+            <h2 id="section-localstorage">Almacenamiento Local</h2>
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre">
+            <button id="guardar">Guardar en localStorage</button>
+            <button id="recuperar">Recuperar de localStorage</button>
+            <p id="mensajeRecuperado" aria-live="polite"></p>
+        </section>
+
+        <!-- Geolocalización -->
+        <section aria-labelledby="section-geolocalizacion">
+            <h2 id="section-geolocalizacion">Geolocalización</h2>
+            <button id="getLocation">Obtener mi ubicación</button>
+            <p id="ubicacion" aria-live="polite"></p>
+        </section>
+
+        <!-- Drag and Drop -->
+        <section aria-labelledby="section-dragdrop">
+            <h2 id="section-dragdrop">Drag and Drop</h2>
+            <div class="drag-zone">
+                <div id="draggable" draggable="true" aria-label="Elemento arrastrable">Arrástrame</div>
+                <div id="dropzone" aria-label="Zona de soltar" aria-dropeffect="move">Suelta aquí</div>
+            </div>
+        </section>
+    </main>
+    <script>
+        // localStorage: Guardar y recuperar datos
+        document.getElementById('guardar').addEventListener('click', () => {
+            const nombre = document.getElementById('nombre').value;
+            localStorage.setItem('nombre', nombre);
+            alert('Nombre guardado en localStorage.');
+        });
+        document.getElementById('recuperar').addEventListener('click', () => {
+            const nombre = localStorage.getItem('nombre');
+            document.getElementById('mensajeRecuperado').textContent = nombre ? `Nombre recuperado: ${nombre}` : 'No hay datos guardados.';
+        });
+
+        // Geolocation API: Obtener y mostrar la ubicación del usuario
+        document.getElementById('getLocation').addEventListener('click', () => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    document.getElementById('ubicacion').textContent = `Latitud: ${lat}, Longitud: ${lon}`;
+                }, () => {
+                    alert('Error al obtener la ubicación.');
+                });
+            } else {
+                alert('Geolocalización no soportada por este navegador.');
+            }
+        });
+
+        // Drag and Drop: Implementación básica
+        const draggable = document.getElementById('draggable');
+        const dropzone = document.getElementById('dropzone');
+
+        draggable.addEventListener('dragstart', (event) => {
+            event.dataTransfer.setData('text', event.target.id);
+        });
+
+        dropzone.addEventListener('dragover', (event) => {
+            event.preventDefault();
+        });
+
+        dropzone.addEventListener('drop', (event) => {
+            event.preventDefault();
+            const data = event.dataTransfer.getData('text');
+            const element = document.getElementById(data);
+            dropzone.appendChild(element);
+            alert('Elemento soltado con éxito.');
+        });
+    </script>
 </body>
 </html>

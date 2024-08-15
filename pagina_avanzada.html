@@ -129,6 +129,23 @@
                 <p id="ubicacion" aria-live="polite"></p>
             </section>
         </div>
+
+        <script>
+            // Codigo de la geolocaizacion
+            document.getElementById('getLocation').addEventListener('click', () => {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition((position) => {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        document.getElementById('ubicacion').textContent = `Latitud: ${lat}, Longitud: ${lon}`;
+                    }, () => {
+                        alert('Error al obtener la ubicación.');
+                    });
+                } else {
+                    alert('Geolocalización no soportada por este navegador.');
+                }
+            });
+        </script>
         <div class="col">
             <!-- Drag and Drop -->
             <section aria-labelledby="section-dragdrop">
@@ -142,20 +159,6 @@
     </div>
     </main>
     <script>
-        // Geolocation API: Obtener y mostrar la ubicación del usuario
-        document.getElementById('getLocation').addEventListener('click', () => {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition((position) => {
-                    const lat = position.coords.latitude;
-                    const lon = position.coords.longitude;
-                    document.getElementById('ubicacion').textContent = `Latitud: ${lat}, Longitud: ${lon}`;
-                }, () => {
-                    alert('Error al obtener la ubicación.');
-                });
-            } else {
-                alert('Geolocalización no soportada por este navegador.');
-            }
-        });
         
         // Implementacion de Drag and Drop
         const draggable = document.getElementById('draggable');

@@ -125,14 +125,14 @@
             <!-- Geolocalización -->
             <section aria-labelledby="section-geolocalizacion">
                 <h2 id="section-geolocalizacion">Geolocalización</h2>
-                <button id="getLocation">Obtener mi ubicación</button>
+                <button id="obtenerUbicacion">Obtener mi ubicación</button>
                 <p id="ubicacion" aria-live="polite"></p>
             </section>
         </div>
 
         <script>
             // Codigo de la geolocaizacion
-            document.getElementById('getLocation').addEventListener('click', () => {
+            document.getElementById('obtenerUbicacion').addEventListener('click', () => {
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition((position) => {
                         const lat = position.coords.latitude;
@@ -156,29 +156,29 @@
                 </div>
             </section>
         </div>
+        <script>
+            
+            // Implementacion de Drag and Drop
+            const draggable = document.getElementById('draggable');
+            const dropzone = document.getElementById('dropzone');
+
+            draggable.addEventListener('dragstart', (event) => {
+                event.dataTransfer.setData('text', event.target.id);
+            });
+
+            dropzone.addEventListener('dragover', (event) => {
+                event.preventDefault();
+            });
+
+            dropzone.addEventListener('drop', (event) => {
+                event.preventDefault();
+                const data = event.dataTransfer.getData('text');
+                const element = document.getElementById(data);
+                dropzone.appendChild(element);
+                alert('Elemento soltado con éxito.');
+            });
+        </script>
     </div>
     </main>
-    <script>
-        
-        // Implementacion de Drag and Drop
-        const draggable = document.getElementById('draggable');
-        const dropzone = document.getElementById('dropzone');
-
-        draggable.addEventListener('dragstart', (event) => {
-            event.dataTransfer.setData('text', event.target.id);
-        });
-
-        dropzone.addEventListener('dragover', (event) => {
-            event.preventDefault();
-        });
-
-        dropzone.addEventListener('drop', (event) => {
-            event.preventDefault();
-            const data = event.dataTransfer.getData('text');
-            const element = document.getElementById(data);
-            dropzone.appendChild(element);
-            alert('Elemento soltado con éxito.');
-        });
-    </script>
 </body>
 </html>
